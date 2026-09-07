@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Homeschoolable | A family learning library</title>
+  <meta name="description" content="Practical, interactive learning resources for our family.">
+  <link rel="stylesheet" href="styles/homeschoolable.css">
+  <style>
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+    a{color:inherit}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}
+    header{background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+    nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{font-size:1.25rem;font-weight:800;text-decoration:none;letter-spacing:-.03em}.brand span{color:var(--blue)}
+    .navlinks{display:flex;gap:24px}.navlinks a{text-decoration:none;color:var(--muted);font-weight:650}
+    main{padding:54px 0 72px}.intro{display:grid;grid-template-columns:1.35fr .65fr;gap:44px;align-items:center;padding:36px 0 56px}
+    .eyebrow{color:var(--blue);font-weight:800;text-transform:uppercase;letter-spacing:.11em;font-size:.78rem}
+    h1{font-size:clamp(2.6rem,7vw,5.4rem);line-height:.98;letter-spacing:-.065em;margin:.18em 0}.lead{font-size:1.2rem;color:var(--muted);max-width:650px}
+    .stack{background:var(--ink);color:white;border-radius:var(--radius);padding:26px;transform:rotate(1.5deg);box-shadow:12px 12px 0 var(--gold)}
+    .stack p{margin:.25rem 0 0;color:#d9e5e8}.stack strong{font-size:1.3rem}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:22px 0 18px}.section-head h2{font-size:1.85rem;letter-spacing:-.035em;margin:0}.section-head p{color:var(--muted);margin:0}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px;min-height:218px;display:flex;flex-direction:column}
+    .tag{align-self:flex-start;color:var(--blue);background:var(--blue2);border-radius:999px;padding:4px 10px;font-size:.78rem;font-weight:800}.card h3{font-size:1.35rem;line-height:1.2;margin:20px 0 7px}.card p{color:var(--muted);margin:0 0 22px}.card a{margin-top:auto;font-weight:800;color:var(--blue);text-underline-offset:4px}
+    .soon{opacity:.7}.principles{margin-top:58px;background:var(--blue2);border-radius:var(--radius);padding:30px;display:grid;grid-template-columns:.7fr 1.3fr;gap:26px}.principles h2{margin:0;font-size:1.8rem;letter-spacing:-.04em}.principles ul{margin:0;padding-left:20px;display:grid;gap:8px}
+    footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted)}footer .wrap{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+    @media(max-width:760px){.navlinks{display:none}.intro,.principles{grid-template-columns:1fr}.intro{padding-top:14px}.stack{transform:none}.grid{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <header><nav class="wrap"><a class="brand" href="/">home<span>schoolable</span></a><div class="navlinks"><a href="#resources">Resources</a><a href="#approach">Our approach</a></div></nav></header>
+  <main class="wrap">
+    <section class="intro">
+      <div><div class="eyebrow">Our family learning library</div><h1>Curiosity belongs at home.</h1><p class="lead">A growing collection of practical, interactive resources we can learn from together—built for real questions, not busywork.</p></div>
+      <aside class="stack"><strong>Start small. Learn deeply.</strong><p>One useful resource at a time, with clear explanations and trustworthy sources.</p></aside>
+    </section>
+    <section id="resources">
+      <div class="section-head"><div><div class="eyebrow">Resource library</div><h2>Explore what we’re learning</h2></div><p>More subjects will be added as we build them.</p></div>
+      <div class="grid">
+<article class="card"><span class="tag">Health & biology</span><h3>Headache pattern map</h3><p>Compare common headache locations, pain patterns, distinguishing clues and urgent warning signs.</p><a href="resources/cute-headache-map.html">Open the interactive map →</a></article>
+<article class="card"><span class="tag">Health & biology</span><h3>Sleep and the brain</h3><p>Explore sleep cycles, the body clock, memory, mood and how much sleep growing brains need.</p><a href="resources/sleep-and-brain.html">Explore the sleep module →</a></article>
+<article class="card"><span class="tag">Health & biology</span><h3>How skin heals</h3><p>Follow a small injury through clotting, cleanup, rebuilding and strengthening—and meet the layers that protect us.</p><a href="resources/how-skin-heals.html">Explore skin healing →</a></article>
+      </div>
+    </section>
+    <section class="principles" id="approach"><h2>Made to grow with us</h2><ul><li><strong>Family first:</strong> understandable resources for learning at home.</li><li><strong>Sources visible:</strong> health information includes references and review dates.</li><li><strong>Purpose labelled:</strong> family learning, public education and future clinical tools remain clearly distinct.</li><li><strong>Privacy respected:</strong> no personal health information is collected.</li></ul></section>
+  </main>
+  <footer><div class="wrap"><span>© 2026 Homeschoolable</span><span>Educational information only—not individual medical advice.</span></div></footer>
+</body>
+</html>
