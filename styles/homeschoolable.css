@@ -80,6 +80,44 @@ footer,.site-footer{padding:28px 0;color:var(--muted)}
   .card-grid{grid-template-columns:1fr}
   .desktop-nav{display:none}.menu-button{display:grid}.home-hero,.welcome-grid,.principles{grid-template-columns:1fr}.home-hero{padding-block:54px;gap:32px}.stack{transform:none;margin-inline:8px}.grid{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column}.library-main{padding-block:50px}.library-note{align-items:flex-start;flex-direction:column}.library-note .stickers{margin-bottom:4px}
 }
+
+/* Shared learning-module shell
+ * New interactive modules should use these components before adding page-specific CSS.
+ */
+button,textarea{font:inherit}
+.module-main{padding-top:28px}
+.module-hero{background:var(--ink);color:#fff;border-radius:30px;padding:clamp(28px,6vw,66px);display:grid;grid-template-columns:1fr .9fr;gap:42px;align-items:center}
+.module-hero h1{color:#fff;font-size:clamp(2.8rem,7vw,5.8rem);line-height:.92;margin:.18em 0}
+.module-hero p{color:#d7e5e8;font-size:1.1rem}
+.module-hero .eyebrow{color:#8de1ed}
+.module-quiz{background:#fff;color:var(--ink);border-radius:24px;padding:26px;box-shadow:13px 13px 0 var(--yellow)}
+.module-quiz h2{font-size:1.55rem;margin:0 0 18px;line-height:1.18}
+.module-choices{display:grid;gap:10px}
+.module-choice{display:block;width:100%;background:#fff;color:var(--ink);border:2px solid var(--line);border-radius:14px;padding:13px;text-align:left;font-weight:850;cursor:pointer}
+.module-choice:hover,.module-choice:focus-visible{background:var(--blue2);border-color:var(--brand)}
+.module-choice.correct{background:#e5f6e9;border-color:var(--green)}
+.module-choice.wrong{background:#ffedef;border-color:var(--coral)}
+.module-feedback{color:var(--ink)!important;background:var(--blue2);border-radius:13px;padding:14px;margin:16px 0 0}
+.module-content{padding-top:1px}
+.module-section{margin:62px 0}
+.module-section-heading h2{font-size:clamp(2rem,5vw,3.2rem);line-height:1.04;margin:.15em 0}
+.module-section-heading p{color:var(--muted);max-width:760px}
+.module-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;background:var(--blue2);color:var(--brand);font-size:.78rem;font-weight:850}
+.module-check{background:var(--ink);color:#fff;border-radius:28px;padding:clamp(24px,5vw,42px)}
+.module-check h2{color:#fff;margin-top:0}
+.module-check p{color:#d7e5e8}
+.module-check textarea{width:100%;min-height:110px;border-radius:14px;border:0;padding:14px}
+.module-answer{margin-top:12px;background:#fff;color:var(--ink);border-radius:14px;padding:15px}
+.module-answer summary{cursor:pointer;font-weight:850;color:var(--brand)}
+.module-mission{margin:60px 0 76px;background:linear-gradient(135deg,#fff1c9,#dff3f8);border-radius:28px;padding:clamp(26px,5vw,48px);display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center}
+.module-mission h2{margin:.15em 0}
+.module-mission p{color:var(--muted);font-size:1.08rem}
+.module-mission a{display:inline-flex;background:var(--ink);color:#fff;border-radius:999px;padding:15px 20px;text-decoration:none;white-space:nowrap}
+@media(max-width:800px){
+  .module-hero,.module-mission{grid-template-columns:1fr}
+  .module-mission a{white-space:normal;justify-content:center}
+}
+
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
