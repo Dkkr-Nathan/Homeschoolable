@@ -122,3 +122,13 @@ button,textarea{font:inherit}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+/* Shared module interaction states and accessible destinations. */
+.module-answer p{color:var(--ink)}
+.module-enter{margin-top:16px;border:0;cursor:pointer}
+.module-enter[hidden]{display:none}
+.module-choice:disabled{cursor:default}
+.module-path{display:flex;flex-wrap:wrap;gap:12px 24px;margin-bottom:20px}
+[data-module-opening]{scroll-margin-top:100px}
+summary:focus-visible,input:focus-visible,textarea:focus-visible,[data-module-opening]:focus{outline:3px solid var(--yellow);outline-offset:3px}
+.video-summary{margin-top:20px}
