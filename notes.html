@@ -2,11 +2,41 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f8f9fb">
+<meta name="theme-color" content="#11151c">
 <title>Notes</title>
 <style>
 :root{font-family:Segoe UI,Arial,sans-serif;color:#232934;background:#f8f9fb;font-synthesis:none}*{box-sizing:border-box}body{margin:0}button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #4263eb;outline-offset:2px}
 .app{height:100dvh;display:flex;flex-direction:column}.toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 16px;background:#fff;border-bottom:1px solid #e6e8ec}.app-name{font-weight:650;letter-spacing:-.02em;margin-right:16px}.filename{min-width:130px;max-width:260px;flex:1;border:1px solid transparent;border-radius:6px;padding:8px;color:#444;background:transparent}.filename:hover,.filename:focus{border-color:#c6cbd5;background:#fff}.tool{background:#fff;border:1px solid #dadfe8;border-radius:7px;padding:8px 11px;color:#323b4c}.tool:hover{background:#f0f3f7}.tool.primary{background:#263e68;color:#fff;border-color:#263e68}.tool.primary:hover{background:#314e7e}.spacer{flex:1}.layout{flex:1;display:flex;min-height:0}.editor-wrap{flex:1;display:flex;flex-direction:column;min-width:0}.editor{flex:1;width:100%;resize:none;border:0;background:#fff;padding:30px max(26px,calc((100vw - 1000px)/2));font:16px/1.7 Consolas,'Cascadia Code',monospace;color:#2a2f37;outline:none}.status{height:31px;border-top:1px solid #e6e8ec;background:#fff;display:flex;align-items:center;gap:18px;padding:0 16px;color:#657084;font-size:12px}.assistant{width:min(380px,42vw);border-left:1px solid #e2e6ee;display:flex;flex-direction:column;background:#f7f8fa}.assistant[hidden]{display:none}.assistant-header{display:flex;justify-content:space-between;align-items:center;padding:15px;border-bottom:1px solid #e2e6ee}.assistant-title{font-weight:650}.assistant-body{padding:16px;display:flex;flex:1;flex-direction:column;min-height:0;gap:13px;overflow:auto}.hint{font-size:13px;line-height:1.5;color:#657084;margin:0}.prompt{width:100%;min-height:130px;padding:11px;border:1px solid #cfd6e0;border-radius:8px;resize:vertical;background:#fff}.assistant-body label{font-size:13px;font-weight:600}.actions{display:flex;flex-wrap:wrap;gap:8px}.note{border:1px solid #e0e5ed;border-radius:9px;background:white;padding:12px;font-size:13px;line-height:1.5}.notice{font-size:12px;color:#586578}.kbd{border:1px solid #c9ced6;border-radius:4px;padding:2px 5px;background:#fff;font-size:12px}.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}@media(max-width:750px){.toolbar{padding:8px;gap:6px}.app-name{margin-right:2px}.filename{min-width:85px;width:95px}.editor{padding:20px 16px}.assistant{position:absolute;top:58px;bottom:31px;right:0;z-index:2;width:min(100%,420px);box-shadow:-6px 0 22px #0001}.tool{padding:8px}.hide-small{display:none}}
+
+/* Notes v0.2 — dark workspace */
+:root{color-scheme:dark;background:#101319;color:#e1e6ef}
+body,.app{background:#101319;color:#e1e6ef}
+.toolbar,.status{background:#161b23;border-color:#303847;color:#a4afc1}
+.app-name{color:#e6ecf5}.filename{color:#d4dfec}
+.filename:hover,.filename:focus{background:#202936;border-color:#5c6b83}
+.tool{background:#252d39;border-color:#3a475a;color:#e2e9f4}
+.tool:hover{background:#334053}
+.tool.primary{background:#33568c;border-color:#4670af;color:#fff}
+.tool.primary:hover{background:#4169a4}
+.editor{background:#101319;color:#e3e9f3}
+.editor::placeholder,.prompt::placeholder{color:#788598}
+.assistant{background:#161b23;border-color:#303847}
+.assistant-header{border-color:#303847}
+.hint,.notice{color:#a4afc1}
+.prompt{background:#101721;border-color:#455267;color:#e7ebf3}
+.note{background:#202936;border-color:#3a465a}
+.kbd{background:#202936;color:#e2e9f4;border-color:#536075}
+.tabs{display:flex;align-items:stretch;gap:3px;padding:5px 10px 0;overflow-x:auto;background:#191f29;border-bottom:1px solid #313b4a;min-height:44px}
+.tab{display:flex;align-items:center;gap:8px;flex:0 0 auto;min-width:100px;max-width:225px;padding:8px 11px;border:1px solid transparent;border-bottom:0;border-radius:7px 7px 0 0;background:#202834;color:#aebbd0;font-size:13px}
+.tab.active{background:#101319;color:#f0f4fa;border-color:#39465a}
+.tab-label{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:155px}
+.tab-close{border:0;background:transparent;color:inherit;border-radius:4px;padding:1px 4px}
+.tab-close:hover{background:#536075}
+.tab-add{background:transparent;border:0;color:#d7dfeb;padding:6px 13px;font-size:20px}
+.connection{border:1px solid #3a475b;background:#1d2633;padding:12px;border-radius:8px}
+.connection p{margin:6px 0 10px;font-size:13px;line-height:1.5;color:#b6c1d1}
+.connection a{color:#a9cbff}
+@media(max-width:750px){.assistant{top:101px}.tab{min-width:80px}}
 </style>
 </head>
 <body><div class="app">
@@ -19,7 +49,7 @@
 <input id="filePicker" type="file" accept=".txt,.md,.csv,.json,text/plain,text/markdown" hidden>
 <span class="spacer"></span><button class="tool primary" id="toggleAssistant" aria-controls="assistant" aria-expanded="false" title="Toggle assistant (Ctrl+Shift+A)">Assistant</button>
 </header>
-<div class="layout"><main class="editor-wrap">
+<nav id="tabs" class="tabs" role="tablist" aria-label="Open documents"></nav><div class="layout"><main class="editor-wrap">
 <label class="visually-hidden" for="editor">Notes editor</label>
 <textarea id="editor" class="editor" spellcheck="true" placeholder="Start typing…" aria-label="Notes editor"></textarea>
 <div class="status"><span id="saveState" role="status">Ready</span><span id="wordCount">0 words</span><span class="hide-small">Ctrl+S to download · Ctrl+Shift+A for assistant</span></div>
@@ -27,6 +57,7 @@
 <aside id="assistant" class="assistant" hidden aria-label="Assistant workspace">
 <div class="assistant-header"><span class="assistant-title">Assistant</span><button id="closeAssistant" class="tool" aria-label="Close assistant">✕</button></div>
 <div class="assistant-body">
+<div class="connection"><strong>ChatGPT connection</strong><p id="connectionStatus">Not connected. Direct sign-in requires OpenAI app registration and authorization. Until then, the copy-to-ChatGPT workflow remains available.</p><button class="tool" id="connectInfoBtn">Connection information</button></div>
 <p class="hint">Prepare a question to send through your existing ChatGPT app. No API key or additional API charges required.</p>
 <label for="prompt">Your instruction</label>
 <textarea class="prompt" id="prompt" placeholder="For example: Reformat the selected text as a clear SOAP note, without adding facts."></textarea>
@@ -39,27 +70,37 @@
 </div></aside></div></div>
 <script>
 (()=>{'use strict';
-const $=id=>document.getElementById(id);
-const editor=$('editor'),filename=$('filename'),saveState=$('saveState'),count=$('wordCount'),assistant=$('assistant'),toggle=$('toggleAssistant');
-const storageKey='homeschoolable.notes.v1';let scope='none',context='',dirty=false,timer;
-try{const v=JSON.parse(localStorage.getItem(storageKey)||'null');if(v && typeof v.text==='string'){editor.value=v.text;filename.value=v.name||'Untitled.txt';saveState.textContent='Local draft restored';}}catch(e){saveState.textContent='Local storage unavailable';}
-function countWords(){const t=editor.value.trim();count.textContent=(t?t.split(/\s+/u).length:0)+' words';}
-function persist(){try{localStorage.setItem(storageKey,JSON.stringify({text:editor.value,name:filename.value}));saveState.textContent='Draft saved on this device';}catch(e){saveState.textContent='Local draft unavailable — download to save';}}
-function changed(){dirty=true;saveState.textContent='Unsaved to file';countWords();clearTimeout(timer);timer=setTimeout(persist,500);}
-editor.addEventListener('input',changed);filename.addEventListener('input',changed);countWords();
+const $=id=>document.getElementById(id),editor=$('editor'),filename=$('filename'),tabs=$('tabs'),status=$('saveState'),count=$('wordCount'),assistant=$('assistant'),toggle=$('toggleAssistant');
+const key='homeschoolable.notes.tabs.v2',legacy='homeschoolable.notes.v1';
+let docs=[],active=null,scope='none',context='',timer;
+function id(){return 'n'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function fresh(name='Untitled.txt',text=''){return {id:id(),name,text}}
+try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(saved&&Array.isArray(saved.docs)){docs=saved.docs.filter(d=>typeof d.id==='string'&&typeof d.name==='string'&&typeof d.text==='string').slice(0,40);active=saved.active;}}catch(e){}
+if(!docs.length){let old=null;try{old=JSON.parse(localStorage.getItem(legacy)||'null')}catch(e){}docs=[fresh(old?.name||'Untitled.txt',old?.text||'')];active=docs[0].id;}
+if(!docs.some(d=>d.id===active))active=docs[0].id;
+function current(){return docs.find(d=>d.id===active)}
+function persist(){try{localStorage.setItem(key,JSON.stringify({docs,active}));status.textContent='Drafts saved locally';}catch(e){status.textContent='Storage unavailable — download your files';}}
+function wordCount(){const v=editor.value.trim();count.textContent=(v?v.split(/\s+/u).length:0)+' words';}
+function sync(){const d=current();if(!d)return;d.text=editor.value;d.name=filename.value;wordCount();status.textContent='Saving locally…';renderTabs();clearTimeout(timer);timer=setTimeout(persist,350);}
+function renderTabs(){tabs.replaceChildren();docs.forEach(d=>{const tab=document.createElement('div');tab.className='tab'+(d.id===active?' active':'');tab.setAttribute('role','tab');tab.setAttribute('aria-selected',String(d.id===active));tab.title=d.name;const label=document.createElement('span');label.className='tab-label';label.textContent=d.name||'Untitled.txt';const close=document.createElement('button');close.type='button';close.className='tab-close';close.title='Close '+d.name;close.setAttribute('aria-label','Close '+d.name);close.textContent='×';close.addEventListener('click',()=>closeTab(d.id));tab.append(label,close);tab.tabIndex=0;tab.addEventListener('click',e=>{if(e.target!==close)activate(d.id)});tab.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activate(d.id)}});tabs.append(tab)});const add=document.createElement('button');add.type='button';add.className='tab-add';add.textContent='+';add.title='New tab (Ctrl+T)';add.setAttribute('aria-label','New note tab');add.addEventListener('click',newTab);tabs.append(add);}
+function activate(which){if(!docs.some(d=>d.id===which))return;active=which;editor.value=current().text;filename.value=current().name;scope='none';context='';$('scopeDescription').textContent='No text selected. Choose selected text or the whole note.';renderTabs();wordCount();persist();editor.focus();}
+function newTab(){const d=fresh();docs.push(d);activate(d.id);}
+function closeTab(which){const d=docs.find(x=>x.id===which);if(!d)return;if(d.text.trim()&&!confirm('Close '+d.name+'? Download first if you need to keep a file copy.'))return;docs=docs.filter(x=>x.id!==which);if(!docs.length)docs=[fresh()];if(active===which)active=docs[Math.max(0,docs.length-1)].id;activate(active);}
+editor.addEventListener('input',sync);filename.addEventListener('input',sync);activate(active);
 function setAssistant(open){assistant.hidden=!open;toggle.setAttribute('aria-expanded',String(open));if(open)$('prompt').focus();else editor.focus();}
 toggle.addEventListener('click',()=>setAssistant(assistant.hidden));$('closeAssistant').addEventListener('click',()=>setAssistant(false));
 function safeName(){let n=filename.value.trim().replace(/[\\/:*?"<>|\x00-\x1F]/g,'_')||'Untitled.txt';if(!/\.(txt|md|csv|json)$/i.test(n))n+='.txt';return n;}
-function download(){const blob=new Blob([editor.value],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=safeName();document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);dirty=false;saveState.textContent='File download requested';}
+function download(){const blob=new Blob([editor.value],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=safeName();document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='File download requested';}
 $('saveBtn').addEventListener('click',download);
 $('openBtn').addEventListener('click',()=>$('filePicker').click());
-$('filePicker').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;if(dirty&&!confirm('Replace the current note? Download it first if you want to keep a file copy.')){e.target.value='';return;}if(file.size>2*1024*1024){alert('Please use a text file smaller than 2 MB.');e.target.value='';return;}editor.value=await file.text();filename.value=file.name;dirty=false;persist();countWords();e.target.value='';editor.focus();});
-$('newBtn').addEventListener('click',()=>{if(editor.value&&(dirty||editor.value.trim())&&!confirm('Start a new note? Download the current note first if needed.'))return;editor.value='';filename.value='Untitled.txt';scope='none';context='';dirty=false;persist();countWords();editor.focus();});
+$('filePicker').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>2*1024*1024){alert('Please use a text file smaller than 2 MB.');e.target.value='';return;}const text=await file.text();const d=fresh(file.name,text);docs.push(d);activate(d.id);e.target.value='';});
+$('newBtn').addEventListener('click',newTab);
 function setScope(next){scope=next;context=next==='selection'?editor.value.substring(editor.selectionStart,editor.selectionEnd):editor.value;if(next==='selection'&&!context){scope='none';$('scopeDescription').textContent='Select text in the editor first.';return;}$('scopeDescription').textContent=(scope==='selection'?'Selected text':'Entire note')+' · '+context.length+' characters';}
 $('selectionBtn').addEventListener('click',()=>setScope('selection'));$('documentBtn').addEventListener('click',()=>setScope('document'));
 function compose(){const instruction=$('prompt').value.trim();if(!instruction)throw Error('Write an instruction first.');if(scope==='none')throw Error('Choose selected text or the whole note first.');if(!context.trim())throw Error('There is no text to include.');return instruction+'\n\n--- Notes ---\n'+context;}
-$('copyBtn').addEventListener('click',async()=>{try{const value=compose();await navigator.clipboard.writeText(value);$('copyStatus').textContent='Copied. Paste into the ChatGPT app or website.';}catch(e){$('copyStatus').textContent=e.message||'Copy failed. Check browser clipboard permissions.';}});
+$('copyBtn').addEventListener('click',async()=>{try{const value=compose();await navigator.clipboard.writeText(value);$('copyStatus').textContent='Copied. Paste into ChatGPT.';}catch(e){$('copyStatus').textContent=e.message||'Copy failed. Check clipboard permissions.';}});
 $('openChatBtn').addEventListener('click',()=>window.open('https://chatgpt.com/','_blank','noopener,noreferrer'));
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();download();}if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==='a'){e.preventDefault();setAssistant(assistant.hidden);}});
+$('connectInfoBtn').addEventListener('click',()=>{alert('Direct Sign in with ChatGPT is currently limited to approved website integrations. This site is not registered for OAuth yet, so login and AI requests are not enabled. See OpenAI developer documentation for website registration requirements.');window.open('https://developers.openai.com/siwc/website','_blank','noopener,noreferrer');});
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();download();}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='t'){e.preventDefault();newTab();}if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==='a'){e.preventDefault();setAssistant(assistant.hidden);}});
 })();
 </script></body></html>
