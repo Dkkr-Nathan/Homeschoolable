@@ -15,7 +15,7 @@ if(!firebaseConfig.apiKey||!firebaseConfig.projectId||!firebaseConfig.appId){
   const state=document.createElement("p");state.setAttribute("role","status");state.textContent="Sign in to synchronize.";
   root.replaceChildren(email,password,login,logout,upload,state);
   const bridge=window.familyPlannerBridge,profiles=["dad","14","13","9"];
-  let unsubscribe=null,allowed=false,loaded=false,base=null,dirty=false,working=false,timer=null,generation=0;
+  let unsubscribe=null,allowed=false,loaded=false,base=null,dirty=false,working=false,timer=null,generation=0,revision=0;
   const clone=x=>structuredClone(x),same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
   function show(s){state.textContent=s}
   function ref(date){return doc(db,"families",familyId,"days",date)}
@@ -41,7 +41,7 @@ if(!firebaseConfig.apiKey||!firebaseConfig.projectId||!firebaseConfig.appId){
   }
   async function save(force=false){
     if(!allowed||!loaded||working||(!dirty&&!force))return;
-    const date=bridge.getDate(),token=generation,local=bridge.getDay(),starting=clone(base);
+    const date=bridge.getDate(),token=generation,local=bridge.getDay(),starting=clone(base),savingRevision=revision;
     working=true;
     try{
       const result=await runTransaction(db,async tx=>{
@@ -63,9 +63,9 @@ if(!firebaseConfig.apiKey||!firebaseConfig.projectId||!firebaseConfig.appId){
       else if(e.message==="ALREADY_EXISTS")show("A shared schedule already exists. Upload cancelled to protect it.");
       else if(e.message==="MISSING")show("Cloud schedule missing. Your changes are still local.");
       else show("Cloud save failed; local changes retained: "+e.message);
-    }finally{if(token===generation)working=false}
+    }finally{if(token===generation){working=false;if(dirty&&revision!==savingRevision){clearTimeout(timer);timer=setTimeout(()=>save(),200)}}}
   }
-  function queue(){if(!allowed||!loaded)return;dirty=true;clearTimeout(timer);timer=setTimeout(()=>save(),600)}
+  function queue(){if(!allowed||!loaded)return;revision++;dirty=true;clearTimeout(timer);timer=setTimeout(()=>save(),600)}
   async function watch(){
     reset();if(!allowed)return;
     const date=bridge.getDate(),token=generation;show("Loading shared schedule...");
