@@ -41,7 +41,7 @@ function getDay(){if(!saved[date.value]){saved[date.value]=defaults();persist()}
 function persist(){try{localStorage.setItem(storeKey,JSON.stringify(saved));window.familyPlannerBridge?.onChange?.()}catch{message("Storage unavailable; export a backup.")}}
 function message(s){document.getElementById("status").textContent=s}
 function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
-function render(){const day=getDay();const tabs=document.getElementById("tabs");tabs.replaceChildren();for(const [id,label] of people){const b=el("button","",label);b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",String(person===id));b.onclick=()=>{person=id;render()};tabs.append(b)}
+function render(){const day=getDay();const tabs=document.getElementById("tabs");tabs.replaceChildren();for(const [id,label] of people){if(window.familyPlannerActiveProfile&&!["dad","mom"].includes(window.familyPlannerActiveProfile)&&id!==window.familyPlannerActiveProfile)continue;const b=el("button","",label);b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",String(person===id));b.onclick=()=>{person=id;render()};tabs.append(b)}
 const items=day[person]||[];const finished=items.filter(x=>x.done).length;const percent=items.length?Math.round(finished/items.length*100):0;
 document.getElementById("progressText").textContent=finished+" / "+items.length+" completed";document.getElementById("progressPercent").textContent=percent+"%";document.getElementById("bar").style.width=percent+"%";document.getElementById("progress").setAttribute("aria-valuenow",percent);
 const root=document.getElementById("schedule");root.replaceChildren();let group="";
