@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function member(familyId) {
+      return signedIn() &&
+        exists(/databases/$(database)/documents/families/$(familyId)/members/$(request.auth.uid));
+    }
+    match /families/{familyId}/members/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false; // Admin provisions membership in Firebase Console.
+    }
+    match /families/{familyId}/days/{day} {
+      allow read: if member(familyId);
+      allow create, update: if member(familyId)
+        && day.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && request.resource.data.keys().hasOnly(['dad','14','13','9'])
+        && request.resource.data.keys().hasAll(['dad','14','13','9'])
+        && request.resource.data.dad is list
+        && request.resource.data['14'] is list
+        && request.resource.data['13'] is list
+        && request.resource.data['9'] is list
+        && request.resource.data.dad.size() <= 100
+        && request.resource.data['14'].size() <= 100
+        && request.resource.data['13'].size() <= 100
+        && request.resource.data['9'].size() <= 100;
+      allow delete: if false;
+    }
+  }
+}
