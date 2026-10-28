@@ -5,7 +5,7 @@ import {firebaseConfig,familyId} from "./firebase-config.js";
 const app=getApps()[0]||initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const profiles=[["dad","Dad","dad.webp"],["mom","Mom","mom.webp"],["14","Age 14","age-14.webp"],["13","Age 13","age-13.webp"],["9","Age 9","age-9.webp"]];
 const gate=document.getElementById("familyGate"),ui=document.getElementById("familyGateUI");
-let selected=null,mode="unlock",parent=null,member=null;
+let selected=null,mode="unlock",parent=null,member=null,authProblem="";
 const storageKey="homeschoolable-family-pin-v1";
 const getPins=()=>{try{return JSON.parse(localStorage.getItem(storageKey)||"{}")}catch{return {}}};
 const savePins=x=>localStorage.setItem(storageKey,JSON.stringify(x));
@@ -17,7 +17,7 @@ function unlock(id){document.body.classList.add("family-unlocked");document.getE
 async function verifyParent(){if(!auth.currentUser||!parent)return false;const password=prompt("Enter your parent account password to authorize this change:");if(!password)return false;try{await reauthenticateWithCredential(auth.currentUser,EmailAuthProvider.credential(auth.currentUser.email,password));return true}catch{alert("Parent password verification failed.");return false}}
 function render(){
 if(!auth.currentUser){ui.innerHTML='<p>Sign in with Dad or Mom’s Firebase account.</p><form id="familyEmailForm"><input id="familyEmail" type="email" required placeholder="Parent email" autocomplete="username"><input id="familyPassword" type="password" required placeholder="Password" autocomplete="current-password"><button type="submit">Sign in</button></form><p id="pinMessage" role="status"></p>';document.getElementById("familyEmailForm").onsubmit=async e=>{e.preventDefault();msg("Signing in…");try{await signInWithEmailAndPassword(auth,document.getElementById("familyEmail").value,document.getElementById("familyPassword").value)}catch{msg("Sign-in failed. Check your email and password.")}};return}
-if(!member){ui.innerHTML='<p>Signed in as: '+auth.currentUser.email+'</p><p id="pinMessage" role="status">Checking membership…</p><button id="familyAccountSwitch">Switch account</button>';document.getElementById("familyAccountSwitch").onclick=()=>signOut(auth);return}
+if(!member){ui.innerHTML='<p>Signed in as: '+auth.currentUser.email+'</p><p id="pinMessage" role="status">'+authProblem+'</p><button id="familyAccountSwitch">Switch account</button>';document.getElementById("familyAccountSwitch").onclick=()=>signOut(auth);return}
 const items=profiles.map(([id,name,image])=>'<button type="button" class="familyAvatar" data-profile="'+id+'"><img src="'+image+'" alt="" width="85" height="85"><span>'+name+'</span></button>').join("");
 ui.innerHTML='<p>Choose a profile. PIN required each time you open the planner.</p><div class="familyAvatars">'+items+'</div><div id="familyPinPanel"></div><p id="pinMessage" role="status"></p><button id="familyAccountSwitch" type="button">Switch parent account</button>';
 document.querySelectorAll(".familyAvatar").forEach(b=>b.onclick=()=>choose(b.dataset.profile));
@@ -48,9 +48,21 @@ if(!await verifyParent())return;
 const s=salt();pins[id]={salt:s,hash:await hash(pin,s)};savePins(pins);msg("PIN created.");unlock(id)
 }
 onAuthStateChanged(auth,async user=>{
-document.body.classList.remove("family-unlocked");member=null;parent=null;selected=null;
-if(user){try{const m=await getDoc(doc(db,"families",familyId,"members",user.uid));if(m.exists()&&m.data().role==="parent"&&["Dad","Mom"].includes(m.data().name)){member=m.data();parent=m.data().name.toLowerCase()}}catch{}}
-render();if(user&&!member)msg("Parent membership not recognized. Confirm this email has a family membership document with role parent and name Dad or Mom.")
+document.body.classList.remove("family-unlocked");member=null;parent=null;selected=null;authProblem="";
+if(user){
+try{
+const m=await getDoc(doc(db,"families",familyId,"members",user.uid));
+if(!m.exists())authProblem="No membership document found for this Firebase account.";
+else{
+const data=m.data(),role=String(data.role||"").trim().toLowerCase(),name=String(data.name||"").trim().toLowerCase();
+if(role!=="parent")authProblem="Membership exists, but role is not parent.";
+else if(name!=="dad"&&name!=="mom")authProblem="Membership exists, but name must be Dad or Mom.";
+else{member=data;parent=name}
+}
+}catch(e){authProblem="Could not read membership: "+(e.code||e.message)}
+}
+render();
 });
+
 document.getElementById("lockFamily").onclick=lock;
 document.getElementById("changeFamilyPin").onclick=async()=>{const id=window.familyPlannerActiveProfile;if(!id||!await verifyParent())return;const pins=getPins();delete pins[id];savePins(pins);lock();selected=id;choose(id);msg("Choose a new PIN.")};
