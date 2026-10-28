@@ -60,4 +60,4 @@ document.getElementById("importFile").onchange=async e=>{const f=e.target.files[
 window.familyPlannerBridge={getDate:()=>date.value,getDay:()=>structuredClone(getDay()),setDay:(data)=>{saved[date.value]=structuredClone(data);persist();render()},onChange:null,onDateChange:null};
 window.familyPlannerSelectProfile=id=>{person=id==="mom"?"dad":id;render()};
 render();
-</script><script type="module" src="scripts/family-sync.js"></script><script type="module" src="scripts/family-pin.js"></script></body></html>
+</script><script type="module" src="scripts/family-sync.js"></script><script type="module" src="scripts/family-pin.js?v=3"></script></body></html>
