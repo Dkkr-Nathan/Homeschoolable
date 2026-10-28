@@ -52,12 +52,14 @@ document.body.classList.remove("family-unlocked");member=null;parent=null;select
 if(user){
 try{
 const m=await getDoc(doc(db,"families",familyId,"members",user.uid));
-if(!m.exists())authProblem="No membership document found for this Firebase account.";
+if(!m.exists())authProblem="No family membership document found for this account.";
 else{
-const data=m.data(),role=String(data.role||"").trim().toLowerCase(),name=String(data.name||"").trim().toLowerCase();
-if(role!=="parent")authProblem="Membership exists, but role is not parent.";
-else if(name!=="dad"&&name!=="mom")authProblem="Membership exists, but name must be Dad or Mom.";
-else{member=data;parent=name}
+member=m.data();
+const email=(user.email||"").trim().toLowerCase();
+if(email==="dekkah2000@gmail.com")parent="dad";
+else if(email==="channie_bananie@yahoo.ca")parent="mom";
+else authProblem="This member is not one of the configured parent accounts.";
+if(!parent)member=null;
 }
 }catch(e){authProblem="Could not read membership: "+(e.code||e.message)}
 }
